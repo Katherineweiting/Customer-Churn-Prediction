@@ -90,60 +90,27 @@ The accuracies for the models are as follows
 - Random Forest Classifier 79.52%
 - Support Vector Machine 79.73%
 
+We retrained the re-trained the Random Forest model based on the whole training dataset and got the ROC curve as below:
+
+![download (1)](https://github.com/Katherineweiting/Customer-Churn-Prediction/assets/58812052/56e021f4-2b49-428a-8c78-a427cdad5ebc)
+
  
-## Performance Matrix
+## Results and Deployment
 Since the optimal goal of a business is to increase its profits, we need to maximize the expected profit formula
 
 ![Picture1](https://github.com/Katherineweiting/Customer-Churn-Prediction/assets/58812052/cae9b694-2c64-4616-a5d7-d64d057682e0)
 
 
 Our Logistic Regression model can be used to predict the probability of customers churning, and the company can rank its customers with a the probability of churning.
-We maximize profit by multiplying the values in the cost-benefit matrix and confusion matrix. Since there is an asymmetry between the benefit of correct predictions and the cost of incorrect predictions, we accounted for this through the weights in the cost-benefit matrix. We assume that on average, if company gave discounts to customer it could make $0.1 if he does not churn, but it lose $0.3 if they churn.
+We then maximize the profit by multiplying the values in the cost-benefit matrix and confusion matrix. Since there is an asymmetry between the benefit of correct predictions and the cost of incorrect predictions, we accounted for this through the weights in the cost-benefit matrix. We assume that on average, if company gave discounts to customer it could make $0.1 if he does not churn, but it lose $0.3 if they churn.
 
 <img src= "https://github.com/Katherineweiting/Customer-Churn-Prediction/assets/58812052/fc83c54b-9651-4850-90ae-ea090bbe9e77" width="50%" height="50%" />
 
+Based on the ranking function, each customer receives a ranking score ordered in descending order. We then find the individual customer(s) above a certain percentile point(threshold). All customers above that percentile point will receive a discount. We picked the threshold that gives us the maximum score, which means that the threshold will have a good level of profits but not at the cost of lower accuracy, which could reduce the campaign's success. Based on our test data, we found that sending coupons to the top 61% of customers will lead to a maximized score, which is the maximized profits ($250), while ensuring a good level of accuracy.
 
+![download](https://github.com/Katherineweiting/Customer-Churn-Prediction/assets/58812052/fa94994e-10c7-41cd-8ba8-c760be483404)
 
-We first run the logistic regression as a baseline model and then build the LSTM model to see how well the model is performing. The implementation includes two parts: hyperparameter tuning and up-sampling:  
- - Hyperparameters Tuning: One of the challenges we faced was model overfitting. We handled this issue by reducing the embedding dimension from 400 to 100, adding L2 regularization, and reducing epochs as early stops. After tuning, the validation loss curve performs a better-decreasing trend.
- - Up-sampling: Another challenge that we encountered during modeling was handling the proportion of positive sentiment. As we see from the visualization, over 80% of the reviews recommended the items, and the imbalanced distribution impacted the model's ability to learn from diverse data. To address the issue, we tackled it by increasing the sample proportion of unrecommend reviews. After up-sampling, the percentage of recommended and unrecommend reviews is 54.4% to 45.6%, and the testing accuracy for binary classification also increased from 87% to 92%.
- 
-## Results and Evaluation
-This analysis is a classification problem, so we use OOS Accuracy to evaluate the result. The baseline model (logistic regression) accuracy for binary classification and multi-class classification is 87% and 55.43% respectively. With the implementation of the LSTM model in both cases, the results turned out to be better than the baseline model. Please see the plot below:
-### a. LSTM for Binary Prediction
- - Test Loss: 0.163
- - Test Accuracy: 93%
-
-![Picture1](https://github.com/Katherineweiting/E-Commerce-Review-Sentiment-Analysis/assets/58812052/719fe51a-7c32-437e-8795-a9b9f23b2e8b)
-
-
-### b. LSTM for Multi-Class Prediction
- - Test Loss: 0.860
- - Test Accuracy: 61.7%
-
-![Picture2](https://github.com/Katherineweiting/E-Commerce-Review-Sentiment-Analysis/assets/58812052/89caee5d-9c09-4185-b53c-f7d956f2129a)
-
-
-It is clear that the LSTM model more accurately identifies whether customers recommend the item compared to classifying its rating. We noticed that the customer reviews often contain a blend of positive and negative aspects. For example, in a 2-star review, a customer mentioned, "it's soft and fits okay, but it has zero support or shape." We believe that such mixed reviews pose a challenge for the model to classify ratings.
-In addition, from the visualization of the Recommendation Rate by Age Group for Department Name, we could see that the “trend” category has the lowest rating among age groups 40 to 49 and 50 to 59. To deep dive into this issue, we use word cloud to identify the most frequently used words in low-rating customer reviews on "trend” items in that group. This approach helps the business get insights from customer feedback and make improvements accordingly.
-
-<img src="https://github.com/Katherineweiting/E-Commerce-Review-Sentiment-Analysis/assets/58812052/7ce05746-1ef9-4b8c-9f1d-af77b03c703b" width=50% height=50%>
-
-
-“Look”, “pattern”, “fabric”, “picture”, “small”, and “waist” are the words that appear more frequently than others, indicating that those customers who give lower ratings have concerns regarding size, material quality, and correspondence with product images. We suggest that the business could focus on those areas to enhance customer ratings.
- 
-## Deployment
-With data mining techniques such as the LSTM model, businesses can gain insights from customers by identifying the sentiment of their feedback. Word clouds also allow companies to delve deeper into specific categories such as age groups and departments.
-From the positive reviews, a word cloud reveals key terms like “Color”, “Look”, “Fit”, “Dress”, “Perfect”, and “Soft”, suggesting that customers particularly value the design and sizing of our clothing, especially our dresses.
-
-<img src="https://github.com/Katherineweiting/E-Commerce-Review-Sentiment-Analysis/assets/58812052/eb4a7208-ccae-4b84-997b-adf910791a58" width=50% height=50%>
-
-Conversely, the word cloud for negative reviews highlights words like “Fabric”, “Material”, “Ordered”, “Retailer”, and “Dress”. This indicates a need for improvement in product quality and after-sales service. The frequent mention of “Dress” in negative reviews is likely due to higher sales volumes in this category, leading to a proportional increase in negative feedback.
-
-<img src="https://github.com/Katherineweiting/E-Commerce-Review-Sentiment-Analysis/assets/58812052/b7ba6bd9-8309-457f-ae4a-ab5fc3b7dc88" width=50% height=50%>
-
-However, our current model has limitations, as some reviews contain both positive and negative comments (e.g., “I like the size, but the material is disappointing”). This can lead to misleading results in our word cloud. To address this, we propose that the e-commerce platform should refine its review system to include more specific feedback options. For instance, at the beginning of the review section, a question such as “Why did you not like our product?” could be accompanied by choices like “Quality”, “Size”, “Design”, etc. This would facilitate more accurate analysis and aid in the company’s ongoing development and improvement.
 
 ## References
-1.	Winter, Dayna. [What Is Ecommerce? A Comprehensive Guide (2024)](https://www.shopify.com/blog/what-is-ecommerce#1)
-2. 	Kaggle.com [Women’s E-Commerce Clothing Reviews](https://www.kaggle.com/datasets/nicapotato/womens-ecommerce-clothing-reviews)
+1.	 Duke University, The Fuqua School of Business - Data Science for Business Class Materials
+2. 	Kaggle.com [Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn/data)
