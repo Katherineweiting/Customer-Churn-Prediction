@@ -78,36 +78,22 @@ Each component explained certain percentage of data variance.
 
  
 ## Modeling
-In this analysis, the LSTM model will be used to make predictions about the sentiment of reviews. With its recurrent neural network, the LSTM model can consider the order of words and memorize the semantic meaning in the hidden state. We believe that the model is suitable for dealing with sentence sequences. Since there are both binary classification factors (Recommend/Unrecommend) and multi-classification factors (Rating from 1 to 5) in the dataset, we try to address both factors by identifying specific predicting outputs and loss functions. Below is the model architecture and hyperparameters:
-### a. Model Architecture
-In the data preparation phase, the text has already been converted into integers. Instead of considering the entire vocabulary size, we can embed the text to condense it into lower dimensions. After that, we add LSTM layers as RNNs to memorize the long-term and short-term semantics of words. Finally, we output the last time step output to predict the sentiment. For binary classification, since the loss function is BCE, we need to add another sigmoid layer; whereas for multi-class classification we use linear layer output because the cross-entropy loss itself includes the sigmoid transformation. Please refer to the below graph for the process:
 
-![Picture1](https://github.com/Katherineweiting/E-Commerce-Review-Sentiment-Analysis/assets/58812052/6de37e98-1d94-4969-8076-dd7398d0cf80)
+The core task of the analysis is to predict whether a customer will chrun (switch their service providers) given the observed characteristics. Since the prediction is binomial, we will conduct data mining for classification prediction. In this analysis, we will be using different supervised learning models including logistic regression, SVM, and Random Forest. We also apply grid search with cross-validation to find the best hyperparameters and make use of all data points to lower model performance bias. The data set is split into 80% training data and 20% testing data. The performance metrics we chose are OOS Accuracy.
 
- 
-### b. Hyperparameters
-Embeddings, number of layers, hidden dimension, and output size are the parameters used in the models:
-#### 1. LSTM for Binary Classification
- - Input: Review Text
- - Label: Recommend or Not (0 or 1)
- - Predicting Output: Sigmoid probability between 1 and 1
- - Loss Function: Binary Cross Entropy Loss
+The result showed that the Logistic Regression model has the best OOS performance with an Accuracy of 81.2%, therefore, we will apply the Logistic Regression model for our prediction.
 
-| Embeddings | Layers | Hidden Dim | Output Size |
-|------------|--------|------------|-------------|
-|    400     |   2    |    256     |      1      |
+### Random Forest
+- Best Parameters: {'max_depth': None, 'n_estimators': 150}
+- Test Accuracy: 79.32%
 
-#### 2. LSTM for Multi-Class Classification
- - Input: Review Text
- - Label: Rating (1 to 5)
- - Output: Linear layer output, output size = 5
- - Loss Function: Cross Entropy Loss
+### SVM
+- Best Parameters: {'C': 1, 'gamma': 'scale'}
+- Test Accuracy: 80.75%
 
-| Embeddings | Layers | Hidden Dim | Output Size |
-|------------|--------|------------|-------------|
-|    400     |   2    |    256     |      5      |
-
-The alternative models that could also be used in this analysis are GRU networks and Transformer models. With the Transformer model, it can solve the issue of encoding bottleneck and parallelization problems in RNN. However, it requires a large amount of data and more computational resources for training.
+### Logistic Regression
+- Best Parameters: {'C': 10, 'solver': 'lbfgs'}
+- Test Accuracy: 81.2%
  
 ## Implementation
 We first run the logistic regression as a baseline model and then build the LSTM model to see how well the model is performing. The implementation includes two parts: hyperparameter tuning and up-sampling:  
