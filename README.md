@@ -81,21 +81,29 @@ Each component explained certain percentage of data variance.
 
 The core task of the analysis is to predict whether a customer will chrun (switch their service providers) given the observed characteristics. Since the prediction is binomial, we will conduct data mining for classification prediction. In this analysis, we will be using different supervised learning models including logistic regression, SVM, and Random Forest. We also apply grid search with cross-validation to find the best hyperparameters and make use of all data points to lower model performance bias. The data set is split into 80% training data and 20% testing data. The performance metrics we chose are OOS Accuracy.
 
-The result showed that the Logistic Regression model has the best OOS performance with an Accuracy of 81.2%, therefore, we will apply the Logistic Regression model for our prediction.
+The result showed that the Logistic Regression model has the best OOS performance%, therefore, we will apply the Logistic Regression model for our prediction.
 
-### Random Forest
-- Best Parameters: {'max_depth': None, 'n_estimators': 150}
-- Test Accuracy: 79.32%
+![download](https://github.com/Katherineweiting/Customer-Churn-Prediction/assets/58812052/58e7cdb9-8f2d-4a5c-b3bf-5dc4fcb1cedc)
 
-### SVM
-- Best Parameters: {'C': 1, 'gamma': 'scale'}
-- Test Accuracy: 80.75%
+The accuracies for the models are as follows 
+- Logistic Regression 80.52%
+- Random Forest Classifier 79.52%
+- Support Vector Machine 79.73%
 
-### Logistic Regression
-- Best Parameters: {'C': 10, 'solver': 'lbfgs'}
-- Test Accuracy: 81.2%
  
-## Implementation
+## Performance Matrix
+Since the optimal goal of a business is to increase its profits, we need to maximize the expected profit formula
+
+![Picture1](https://github.com/Katherineweiting/Customer-Churn-Prediction/assets/58812052/cae9b694-2c64-4616-a5d7-d64d057682e0)
+
+
+Our Logistic Regression model can be used to predict the probability of customers churning, and the company can rank its customers with a the probability of churning.
+We maximize profit by multiplying the values in the cost-benefit matrix and confusion matrix. Since there is an asymmetry between the benefit of correct predictions and the cost of incorrect predictions, we accounted for this through the weights in the cost-benefit matrix. We assume that on average, if company gave discounts to customer it could make $0.1 if he does not churn, but it lose $0.3 if they churn.
+
+<img src= "https://github.com/Katherineweiting/Customer-Churn-Prediction/assets/58812052/fc83c54b-9651-4850-90ae-ea090bbe9e77" width="50%" height="50%" />
+
+
+
 We first run the logistic regression as a baseline model and then build the LSTM model to see how well the model is performing. The implementation includes two parts: hyperparameter tuning and up-sampling:  
  - Hyperparameters Tuning: One of the challenges we faced was model overfitting. We handled this issue by reducing the embedding dimension from 400 to 100, adding L2 regularization, and reducing epochs as early stops. After tuning, the validation loss curve performs a better-decreasing trend.
  - Up-sampling: Another challenge that we encountered during modeling was handling the proportion of positive sentiment. As we see from the visualization, over 80% of the reviews recommended the items, and the imbalanced distribution impacted the model's ability to learn from diverse data. To address the issue, we tackled it by increasing the sample proportion of unrecommend reviews. After up-sampling, the percentage of recommended and unrecommend reviews is 54.4% to 45.6%, and the testing accuracy for binary classification also increased from 87% to 92%.
