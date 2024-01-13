@@ -6,8 +6,18 @@ Customer churn occurs when customers switch their service providers. For organiz
 
 Several reasons could cause customers to churn, such as new competitors, poor customer service, network service problems or high cost. We could come up with countermeasures to address each problem. However, in this project we choose the solutions that could be deployed quickly as required in real business scenario, specifically **offering promotions and discounts**.
 
+## Data Preparation
+The data preparation can be divided into three parts: Data Cleaning and Changing Data Type.
+### a. Data Cleaning:
+
+ - Drop Null Values: Drop rows which has empty Total Charges
+ - Drop Unecessary column: Drop Customer ID
+
+### b. Changing Data Type:
+ - Adjust numerical value data to type "float64" and categorical data to type "object"
  
-## Data Understanding 
+## Data Understanding and Exploration
+
 The dataset contains 7,043 entries and 21 distinct feature variables. The main features cover categories including demographics, billing, online services and streaming. The target variable is whether a customer will churn or not.
 
 
@@ -28,18 +38,44 @@ Below chart shows the center of each cluster, and we also extracted features tha
 |     3      |          0         |  31.830882 |   41.992500   |   680    |
 
 
+### PCA Analysis
 
-## Data Preparation
-The data preparation can be divided into three parts: Data Cleaning, Text Tokening, and Length Padding.
-### a. Data Cleaning:
- - Removing Duplicates: Remove 21 rows of duplicates to maintain the integrity of the dataset, ensuring that each row provides unique and valuable information.
- - Drop Null Values: Drop rows which has empty review text. Since this analysis is largely based on text sentiment, these rows will not be useful for us.
- - Add “Text Length” column: Add text length column as a reference for padding length
-### b. Text Tokenizing and Encoding
- - Tokenize each review sentence into word tokens. Remove punctuation and encode the word into integers by sorting word frequency.
- - Turn sentences into word vectors.
-### c. Padding Sequence
- - We extend or cut sentences into specific lengths to deal with too short or long reviews.  This measure is to ensure we have more standardized and consistent datasets to feed into deep learning networks. As observed in the “text length” visualization, there is a surge of around 100 words. Therefore, we use 100 as our padding sequence length.
+Another exploration with data is to utilize Principle Component Analysis and find out the features made up of each component.
+Each component explained certain percentage of data variance.
+
+![download](https://github.com/Katherineweiting/Customer-Churn-Prediction/assets/58812052/4afe18fa-d695-4db2-bf3b-b189e7a91262)
+
+1. First Component: Below shows the 10 largest features made up of the first component. It is obvious that internet service is an important variable.
+
+| Feature                               | Value      |
+|---------------------------------------|------------|
+| InternetService_No                    | 0.290471   |
+| OnlineSecurity_No internet service    | 0.290471   |
+| OnlineBackup_No internet service      | 0.290471   |
+| DeviceProtection_No internet service  | 0.290471   |
+| TechSupport_No internet service       | 0.290471   |
+| StreamingTV_No internet service       | 0.290471   |
+| StreamingMovies_No internet service   | 0.290471   |
+| PaperlessBilling_No                   | 0.123803   |
+| PaymentMethod_Mailed check            | 0.116226   |
+| MultipleLines_No                      | 0.115541   |
+
+2. Second Component: Below shows the 10 largest features made up of the second component. Tenure, Total charges, and Contract features are all related to customer loyalty.
+
+| Feature               | Value      |
+|-----------------------|------------|
+| tenure                | 0.332016   |
+| TotalCharges          | 0.320498   |
+| Contract_Two year     | 0.239735   |
+| Partner_Yes           | 0.215425   |
+| DeviceProtection_Yes  | 0.205186   |
+| TechSupport_Yes       | 0.188910   |
+| StreamingMovies_Yes   | 0.178788   |
+| StreamingTV_Yes       | 0.178376   |
+| OnlineBackup_Yes      | 0.174636   |
+| OnlineSecurity_Yes    | 0.165281   |
+
+
  
 ## Modeling
 In this analysis, the LSTM model will be used to make predictions about the sentiment of reviews. With its recurrent neural network, the LSTM model can consider the order of words and memorize the semantic meaning in the hidden state. We believe that the model is suitable for dealing with sentence sequences. Since there are both binary classification factors (Recommend/Unrecommend) and multi-classification factors (Rating from 1 to 5) in the dataset, we try to address both factors by identifying specific predicting outputs and loss functions. Below is the model architecture and hyperparameters:
