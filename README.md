@@ -8,18 +8,24 @@ Several reasons could cause customers to churn, such as new competitors, poor cu
 
  
 ## Data Understanding 
-The dataset comprises 23,846 entries and 10 distinct feature variables. The main feature of the dataset is Review Text, which encompasses customer reviews supported by additional attributes such as 'Clothing ID', 'Age', 'Title', 'Rating', 'Recommended IND', 'Department Name', and 'Class Name'. Before data preparation and modeling, we developed visualizations to explore significant aspects of the data:
-The average rating across all reviews is approximately 4.2, indicating predominantly positive feedback. This favorable outlook is bolstered by the fact that around 82% of the reviews include a recommendation for the product. The comparison of the two plots indicates that customers will recommend the item when the rating is around 4 to 5.
+The dataset contains 7,043 entries and 21 distinct feature variables. The main features cover categories including demographics, billing, online services and streaming. The target variable is whether a customer will churn or not.
 
-<img src="https://github.com/Katherineweiting/E-Commerce-Review-Sentiment-Analysis/assets/58812052/b886a898-2024-403e-9c9a-0d9e2cdbe4b9" width=50% height=50%><img src="https://github.com/Katherineweiting/E-Commerce-Review-Sentiment-Analysis/assets/58812052/ee2d43eb-4dc2-453d-a570-01692bea6fdf" width=50% height=50%>
 
-We also explore the distribution of class names by recommendation percentage. The findings are consistent with the overall trend except for the 'Trend' class, which has a slightly higher un-recommendation rate. Among all categories, 'Dresses', 'Knits', and 'Blouses' garnered the highest number of reviews.
+### K Means
 
-<img src="https://github.com/Katherineweiting/E-Commerce-Review-Sentiment-Analysis/assets/58812052/eb1a1c5c-5303-4f3e-94e2-d8ffc79207d3" width=50% height=50%><img src="https://github.com/Katherineweiting/E-Commerce-Review-Sentiment-Analysis/assets/58812052/cad5fd44-d266-41ae-9617-161c64384c44" width=50% height=50%>
+We used K means as an unsupervised learning technique to segment customers and understand our existing customer base.
+Below chart shows the center of each cluster, and we also extracted features that are most relevant to the analysis. From the result we could see that:
 
-In the last part of data exploration, we examine the recommendation percentage of different age groups among departments. A positive reception of the products is consistent across the range of demographics. However, the trend” category has the lowest rating among age groups 40 to 49 and 50 to 59.
+1. Internet Service is a big part among all telecom service, as we could clearly distinguish the group without internet service with others. This group is also charged the least, and accounts for around 22% of the total population.
+2. The first cluster pays the highest monthly charge of all groups, and they also stays with the service provider with the longest time. This group should create the highest value to the company.
 
- ![newplot](https://github.com/Katherineweiting/E-Commerce-Review-Sentiment-Analysis/assets/58812052/62a63d84-b06e-40ab-a34c-d04732f55e90)
+
+|  clusters  | InternetService_No |   tenure   | MonthlyCharge |  Count   |
+|------------|--------------------|------------|---------------| -------- |
+|     0      |          0         |  54.758588 |   91.517438   |  2096    |
+|     1      |          1         |  30.667763 |   21.076283   |  1520    |
+|     2      |          0         |  16.431287 |   74.287135   |  2736    |
+|     3      |          0         |  31.830882 |   41.992500   |   680    |
 
 
 
